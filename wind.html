@@ -1,0 +1,1443 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+    <title>风之意境v0.1.20221209</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+        div{
+            -moz-user-select: none;/*火狐*/
+            -webkit-user-select: none;/*webkit浏览器*/
+            -ms-user-select:none;/*IE10*/
+            -khtml-user-select:none;/*早期浏览器*/
+            -o-user-select: none;
+            user-select: none;
+        }
+        input:focus {
+            outline: none;
+        }
+        textarea:focus {
+            outline: none;
+        }
+        .clear-fix:after {
+            visibility: hidden;
+            display: block;
+            font-size: 0;
+            content: " ";
+            clear: both;
+            height: 0;
+        }
+        .k-line-wrap {
+            width: 100%;
+            max-width: 1080px;
+            margin: 0 auto;
+            height: 49vh;
+            /* position: fixed;
+            z-index: 2;
+            top: 0;
+            left: 0; */
+            background: #ffffff;
+        }
+        #charts-wrap {
+            width: 100%;
+            height: 49vh;
+        }
+        #action-wrap {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+            /* position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 49vh;
+            transform:translate3d(-50%,0,0); */
+        }
+        #toast-wrap {
+            width:fit-content;
+            max-width: 70vw;
+            position: fixed;
+            z-index: 110;
+            bottom: 30vh;
+            left: 50%;
+            transform:translate3d(-50%,0,0);
+            background: rgba(0,0,0,.75);
+            padding: 10px;
+            color: #ffffff;
+            display: none;
+        }
+        .btn {
+            width: 20%;
+            max-width: 100px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            border: 1px solid #0000ff;
+            margin: 3px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .current-date-wrap {
+            line-height: 30px;
+            border-bottom: 1px solid #b8b8bd;
+            padding: 5px;
+        }
+        .current-date-wrap .show-val {
+            width: 49%;
+            float: left;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .current-date-wrap .show-val span {
+            font-size: 12px;
+        }
+        .position-wrap {
+            margin-top: 1px;
+            line-height: 25px;
+            border-bottom: 1px solid #b8b8bd;
+            padding: 5px;
+        }
+        .position-wrap .show-val {
+            width: 49%;
+            float: left;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .position-wrap .show-val span {
+            font-size: 12px;
+        }
+        .action-btn-wrap {
+            margin-top: 5px;
+            position: relative;
+            min-height: 66px;
+            border-bottom: 1px solid #b8b8bd;
+        }
+        .action-btn-wrap .btn-wrap {
+            width: 80%;
+            max-width: 440px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform:translate3d(-50%,0,0);
+        }
+        .action-btn-wrap .btn-wrap .btn {
+            float: left;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        #option-window-wrap {
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            z-index: 105;
+            top: 0;
+            left: 0;
+            background: rgba(0,0,0,.85);
+            /* display: none; */
+        }
+        .params-conf {
+            padding: 10px 0;
+            color: #ffffff;
+            width: 94%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .params-conf .title {
+            line-height: 25px;
+            margin-top: 15px;
+        }
+        .params-conf .select-wrap {
+            margin-top: 1px;
+        }
+        .params-conf .select-wrap select {
+            width: 100%;
+            height: 35px;
+        }
+        .params-conf .btn-start {
+            margin-top: 35px;
+            background: #ffffff;
+            color: #000000;
+            line-height: 50px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .params-conf .help {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999999;
+        }
+        #slider-range-klimit-wrap {
+            height: 28px;
+            overflow: hidden;
+            padding: 2px 6px;
+            border-bottom: 1px solid #b8b8bd;
+        }
+        #slider-range-klimit-wrap label {
+            float: left;
+        }
+        #slider-range-klimit-wrap span {
+            width: 45px;
+            display: inline-block;
+        }
+        #slider-range-klimit-wrap input {
+            float: left;
+            width: 45%;
+            margin-left: 10px;
+        }
+        #ext-func-wrap {
+            position: fixed;
+            z-index: 102;
+            width: 100%;
+            max-width: 1080px;
+            top: 0;
+            left: 50%;
+            transform:translate3d(-50%,0,0);
+        }
+        #ext-func-wrap .btn-ext {
+            position: absolute;
+            z-index: 102;
+            background: rgba(0,0,0,.4);
+            color: #ffffff;
+            font-size: 13px;
+            text-align: center;
+            cursor: pointer;
+            width: 50px;
+            height: 43px;
+            padding-top: 7px;
+            line-height: 18px;
+        }
+        #ext-func-wrap .btn-auto-trade {
+            top: 0;
+            left: 170px;
+        }
+        #ext-func-wrap .btn-req-pk {
+            top: 0;
+            left: 225px;
+            display: none;
+        }
+        #ext-func-wrap .btn-reset {
+            top: 0;
+            left: 60px;
+        }
+        #ext-func-wrap .btn-draw-line {
+            top: 0;
+            left: 115px;
+        }
+        .mark-line-wrap {
+            display: none;
+            line-height: 18px;
+            width: 70vw;
+            max-width: 500px;
+            height: 50px;
+            position: absolute;
+            z-index: 101;
+            top: 50px;
+            left: 60px;
+            background: rgba(0,0,0,.4);
+            color: #ffffff;
+            border-top: 1px solid #ffffff;
+            text-align: center;
+        }
+        .mark-line-wrap .mark-line-tip {
+            margin-top: 10px;
+        }
+        .mark-line-wrap input.mark-line-range {
+            width: 90%;
+        }
+        .mark-line-wrap input.mark-line-txt {
+            width: 70px;
+            height: 22px;
+            line-height: 22px;
+            background: transparent;
+            border: none;
+            padding-left: 5px;
+            color: #ffffff;
+        }
+        .mark-line-wrap .btn-mark-line {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid #ffffff;
+            cursor: pointer;
+            text-align: center;
+        }
+        .mark-line-wrap .label-mark-line {
+            width: 70px;
+        }
+        .footer {
+            margin-top: 20px;
+            line-height: 25px;
+            text-align: center;
+            color: #cccccc;
+        }
+        .pk-wrap {
+            position: fixed;
+            z-index: 106;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            background: rgba(0,0,0,.8);
+            display: none;
+        }
+        .pk-wrap .pk-tip {
+            text-align: center;
+            color: #ffffff;
+            margin: 12vh auto 0;
+        }
+        .pk-wrap .pk-url {
+            width: 80%;
+            max-width: 500px;
+            margin: 20px auto 0;
+        }
+        .pk-wrap .pk-url textarea {
+            width: 99%;
+            height: 80px;
+        }
+        .pk-wrap .btn-start-pk {
+            width: 80%;
+            max-width: 500px;
+            line-height: 45px;
+            margin: 20px auto 0;
+            background: #ffffff;
+            text-align: center;
+            cursor: pointer;
+        }
+        .auto-trade-wrap {
+            position: fixed;
+            z-index: 107;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            background: rgba(0,0,0,.8);
+            display: none;
+        }
+        .auto-trade-wrap .btn-start-auto-trade, .auto-trade-wrap .btn-cancel-auto-trade, .auto-trade-wrap .btn-start-auto-play-kline {
+            width: 80%;
+            max-width: 500px;
+            line-height: 45px;
+            margin: 20px auto 0;
+            background: #ffffff;
+            text-align: center;
+            cursor: pointer;
+        }
+        .auto-trade-wrap .auto-trade-tip {
+            text-align: center;
+            color: #ffffff;
+            margin: 20px auto 0;
+            width: 80%;
+            max-width: 500px;
+            text-align: left;
+        }
+        .auto-trade-wrap .table-wrap {
+            margin: 20px auto 0;
+            width: 80%;
+            max-width: 500px;
+        }
+        .auto-trade-wrap .table-wrap .row {
+            line-height: 25px;
+            color: #fff;
+            margin-top: 5px;
+        }
+        .auto-trade-wrap .table-wrap .col {
+            width: 40%;
+            height: 25px;
+            float: left;
+        }
+        .auto-trade-wrap .table-wrap .col.btn-row {
+            width: 15%;
+            text-align: center;
+            font-size: 16px;
+            border: 1px solid #ffffff;
+        }
+        .auto-trade-wrap .table-wrap input {
+            width: 90%;
+            height: 23px;
+            border-bottom: 1px solid #ffffff;
+            background: transparent;
+            color: #fff;
+            outline: none;
+            padding-left: 5px;
+        }
+        .auto-trade-wrap .table-wrap select {
+            width: 100%;
+            height: 35px;
+            outline: none;
+            margin: 0 0 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="k-line-wrap">
+        <div id="charts-wrap"></div>
+    </div>
+
+    <div id="ext-func-wrap">
+        <div class="btn-ext btn-reset">重新<br/>开局</div>
+        <div class="btn-ext btn-draw-line">设置<br/>树枝</div>
+        <div class="mark-line-wrap">
+            <div class="mark-line-tip">画线点位: 
+                <span class="btn-mark-line btn-mark-line-sub">-</span>
+                <span class="btn-mark-line label-mark-line"><input type="number" class="mark-line-txt" id="mark-line-value" value="0" /></span>
+                <span class="btn-mark-line btn-mark-line-add">+</span>
+            </div>
+            <!-- <input type="range" class="mark-line-range" id="slider-range-mark-line" value="0" min="0" max="10000" data-hightlight="true" /> -->
+        </div>
+        <div class="btn-ext btn-auto-trade">自动<br/>交易</div>
+        <div class="btn-ext btn-req-pk">邀请<br/>PK</div>
+        
+    </div>
+
+    <div id="action-wrap">
+        <div id="slider-range-klimit-wrap">
+            <label for="slider-range-klimit" id="slider-range-klimit-label">显示K线个数: <span>100</span></label>
+            <input type="range" id="slider-range-klimit" value="100" min="30" max="1000" data-hightlight="true" />
+        </div>
+
+        <div class="action-btn-wrap clear-fix">
+            <div class="btn-wrap">
+                <div class="btn btn-buy" alt="如有持仓则买平，否则买开，快捷键A" title="如有持仓则买平，否则买开，快捷键A" onselectstart="return false;" unselectable="on">买(A)</div>
+                <div class="btn btn-sell" alt="如有持仓则卖平，否则卖开，快捷键B" title="如有持仓则卖平，否则卖开，快捷键B" onselectstart="return false;" unselectable="on">卖(B)</div>
+                <div class="btn btn-back" alt="先平仓，再反向开仓，快捷键C" title="先平仓，再反向开仓，快捷键C" onselectstart="return false;" unselectable="on">反手(C)</div>
+                <div class="btn btn-next" alt="保持现有仓位不动，进入下一个K线，快捷键D或空格" title="保持现有仓位不动，进入下一个K线，快捷键D或空格" onselectstart="return false;" unselectable="on">继续(D)</div>
+            </div>
+        </div>
+
+        <div class="position-wrap clear-fix">
+            <div class="show-val v-pos-profit-temp">浮动盈亏: <span>-</span></div>
+            <div class="show-val v-pos-flag">方向: <span>-</span></div>
+            <div class="show-val v-pos-profit">平仓盈亏: <span>-</span></div>
+            <div class="show-val v-pos-pos">持仓: <span>-</span></div>
+            <div class="show-val v-pos-profit-total">总计盈亏: <span>-</span></div>
+            <div class="show-val v-kdata-len">剩余: <span>0</span>个数据</div>
+        </div>
+
+        <div class="position-wrap clear-fix">
+            <div class="show-val v-init-amount">初始金额: <span>-</span></div>
+            <div class="show-val v-curr-amount">当前权益: <span>-</span></div>
+            <div class="show-val v-bond-amount">保证金: <span>-</span></div>
+            <div class="show-val v-free-amount">当前可用: <span>-</span></div>
+            <div class="show-val v-trade-clicks">交易次数: <span>-</span></div>
+        </div>
+
+        <div class="current-date-wrap clear-fix">
+            <div class="show-val v-code">品种: <span>-</span></div>
+            <div class="show-val v-date">日期: <span>-</span></div>
+            <div class="show-val v-open">开盘: <span>0</span></div>
+            <div class="show-val v-height">最高: <span>0</span></div>
+            <div class="show-val v-close">收盘: <span>0</span></div>
+            <div class="show-val v-low">最低: <span>0</span></div>
+        </div>
+
+        <div class="footer">期货的世界 · 风之意境</div>
+
+    </div>
+
+    <div id="toast-wrap"></div>
+
+    <div id="option-window-wrap">
+        <div class="params-conf">
+            <div class="title">品种</div>
+            <div class="select-wrap">
+                <select id="obj-symbol">
+                    <option value ="">随机</option>
+                </select>
+            </div>
+
+            <div class="title">最大截取K线数量</div>
+            <div class="select-wrap">
+                <select id="obj-max-kdata-limit">
+                    <option value ="200">200</option>
+                    <option value ="300">300</option>
+                    <option value ="500">500</option>
+                    <option value ="800">800</option>
+                    <option value ="1000">1000</option>
+                </select>
+            </div>
+
+            <div class="title">保证金比例</div>
+            <div class="select-wrap">
+                <select id="obj-trade-bond">
+                    <option value ="10">10%</option>
+                    <option value ="15">15%</option>
+                    <option value ="20">20%</option>
+                    <option value ="30">30%</option>
+                    <option value ="40">40%</option>
+                    <option value ="50">50%</option>
+                </select>
+            </div>
+
+            <div class="title">初始入金杠杆</div>
+            <div class="select-wrap">
+                <select id="obj-trade-rate">
+                    <option value ="1">无杠杆(按首次开仓点位市值入金)</option>
+                    <option value ="1.5">1.5倍杠杆</option>
+                    <option value ="2">2倍杠杆</option>
+                    <option value ="3">3倍杠杆</option>
+                    <option value ="4">4倍杠杆</option>
+                    <option value ="5">5倍杠杆</option>
+                    <option value ="6">6倍杠杆</option>
+                    <option value ="7">7倍杠杆</option>
+                    <option value ="8">8倍杠杆</option>
+                </select>
+            </div>
+
+            <div class="btn-start">开始训练</div>
+            <div class="help">
+                &nbsp;&nbsp;风之意境 · 功能说明：<br/>
+                【买】如持仓则买平，否则买开，快捷键A；<br/>
+                【卖】如持仓则卖平，否则卖开，快捷键B；<br/>
+                【反手】先平仓再反向开仓，快捷键C；<br/>
+                【继续】进入到下一个K线，快捷键D或空格；<br/>
+                【盈亏金额】= 盈亏点数 * 合约乘数；<br/>
+                【盈亏百分比】= 盈亏金额 / 入金金额 * 100；<br/>
+                【入金金额】首次开仓点位市值 / 杠杆比率；<br/>
+                【爆仓】保证金不足时视为爆仓。<br/>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="pk-wrap">
+        <div class="pk-tip">请发送PK链接给好友</div>
+        <div class="pk-url"><textarea class="pk-url-value"></textarea></div>
+        <div class="btn-start-pk">开始PK</div>
+    </div>
+
+    <div class="auto-trade-wrap">
+        <div class="auto-trade-tip">
+            说明：<br/>1.当浮动盈利百分比大于a%时，就自动移动交易树枝到浮动盈利回撤b%的位置上。<br/>2.如果总盈利达到预期，则停止自动交易。
+        </div>
+        <div class="table-wrap">
+            <div class="row">
+                <select id="obj-kline-play-speed">
+                    <option value ="1000">播放速度:1X</option>
+                    <option value ="500">播放速度:2X</option>
+                    <option value ="333">播放速度:3X</option>
+                    <option value ="2000">播放速度:0.5X</option>
+                </select>
+            </div>
+            <div class="row">
+                <select id="obj-trade-profit-hope">
+                    <option value ="0">总盈利预期:无限制</option>
+                    <option value ="5">总盈利预期:5%</option>
+                    <option value ="10">总盈利预期:10%</option>
+                    <option value ="15">总盈利预期:15%</option>
+                    <option value ="20">总盈利预期:20%</option>
+                    <option value ="30">总盈利预期:30%</option>
+                    <option value ="50">总盈利预期:50%</option>
+                    <option value ="75">总盈利预期:75%</option>
+                    <option value ="100">总盈利预期:100%</option>
+                    <option value ="150">总盈利预期:150%</option>
+                    <option value ="200">总盈利预期:200%</option>
+                    <option value ="300">总盈利预期:300%</option>
+                    <option value ="500">总盈利预期:500%</option>
+                </select>
+            </div>
+            <div class="row clear-fix">
+                <div class="col">浮动盈利a%</div>
+                <div class="col">盈利回撤b%</div>
+                <div class="col btn-row btn-add-row">+</div>
+            </div>
+
+            <!-- <div class="row form-row clear-fix">
+                <div class="col"><input type="number" class="tb-auto-trade-profit" value="" /></div>
+                <div class="col"><input type="number" class="tb-auto-trade-callback" value="" /></div>
+                <div class="col btn-row btn-del-row">-</div>
+            </div> -->
+        </div>
+        <div class="btn-start-auto-trade">开始自动化交易</div>
+        <div class="btn-start-auto-play-kline">仅开始播放行情</div>
+        <div class="btn-cancel-auto-trade">取消</div>
+    </div>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+    <script type="text/javascript">
+        var TTTYOBJ = {};
+        TTTYOBJ.symbolList = [
+            'A', 'B', 'C', 'CS', 'EG', 'I', 'J', 'JD', 'JM', 'L', 'M', 'P', 'PP', 'V', 'Y', //, 'EB', 'PG', 'RR', 'BB', 'FB'
+            'SC',//'LU', 'NR', 
+            'AG', 'AL', 'AU', 'BU', 'CU', 'FU', 'HC', 'NI', 'PB', 'RB', 'RU', 'SN', 'SP', 'ZN',//, 'SS', 'WR'
+            'AP', 'CF', 'CJ', 'CY', 'FG', 'MA', 'OI', 'RM', 'RS', 'SF', 'SM', 'SR', 'TA', 'ZC',//, 'PM', 'SA', 'JR', 'LR', 'RI', 'WH'
+            // 'IC', 'IF', 'IH', 'T', 'TF', 'TS',
+        ];
+        TTTYOBJ.symbolRateList = {
+            'A':10, 'B':10, 'BB':500, 'C':10, 'CS':10, 'EG':10, 'FB':10, 'I':100, 'J':100, 'JD':5, 'JM':60, 'L':5, 'M':10, 'P':10, 'PP':5, 'V':5, 'Y':10, //, 'EB', 'PG', 'RR'
+            'SC':1000,//'LU', 'NR', 
+            'AG':15, 'AL':5, 'AU':1000, 'BU':10, 'CU':5, 'FU':10, 'HC':10, 'NI':1, 'PB':5, 'RB':10, 'RU':10, 'SN':1, 'SP':10, 'WR':10, 'ZN':5,//, 'SS'
+            'AP':10, 'CF':5, 'CJ':5, 'CY':5, 'FG':20, 'JR':20, 'LR':20, 'MA':10, 'OI':10, 'RI':20, 'RM':10, 'RS':10, 'SF':5, 'SM':5, 'SR':10, 'TA':5, 'WH':20, 'ZC':100,//, 'PM', 'SA'
+            // 'IC', 'IF', 'IH', 'T', 'TF', 'TS',
+        };
+        TTTYOBJ.symbolNameList = {
+            'A': '豆一', 'B': '豆二', 'C': '玉米', 'CS': '玉米淀粉', 'EG': '乙二醇', 'I': '铁矿石', 'J': '焦炭', 'JD': '鸡蛋', 'JM': '焦煤', 'L': '塑料', 'M': '豆粕', 'P': '棕榈油', 'PP': 'PP', 'V': 'PVC', 'Y': '豆油', //, 'EB', 'PG', 'RR', 'BB': '胶合板', 'FB': '纤维板'
+            'SC': '原油',//'LU', 'NR', 
+            'AG': '白银', 'AL': '沪铝', 'AU': '黄金', 'BU': '沥青', 'CU': '沪铜', 'FU': '燃油', 'HC': '热卷', 'NI': '沪镍', 'PB': '沪铅', 'RB': '螺纹', 'RU': '橡胶', 'SN': '沪锡', 'SP': '纸浆', 'ZN': '沪锌',//, 'SS', 'WR': '线材'
+            'AP': '苹果', 'CF': '棉花', 'CJ': '红枣', 'CY': '棉纱', 'FG': '玻璃', 'MA': '甲醇', 'OI': '菜油', 'RM': '菜粕', 'RS': '菜籽', 'SF': '硅铁', 'SM': '锰硅', 'SR': '白糖', 'TA': 'PTA', 'ZC': '动力煤',//, 'PM', 'SA', 'JR': '粳稻', 'LR': '晚籼', 'RI': '早籼', 'WH': '强麦'
+            // 'IC', 'IF', 'IH', 'T', 'TF', 'TS',
+        };
+        TTTYOBJ.symbol = '';
+        TTTYOBJ.myKdata = [];
+        TTTYOBJ.getKdataUrl = 'https://stock2.finance.sina.com.cn/futures/api/json.php/IndexService.getInnerFuturesDailyKLine?symbol=';
+        TTTYOBJ.kDataIndex = 0;
+        TTTYOBJ.kStartIndex = -1;
+        TTTYOBJ.currentKdata = [];
+        TTTYOBJ.position = {pos: 0, flag: '', profit: 0, profitTemp: 0, initAmount: 0, posGameOver: 0};
+        TTTYOBJ.btnClicks = {buy: 0, sell: 0, back: 0};
+        TTTYOBJ.toastTimer = null;
+
+        TTTYOBJ.kDisplayLimit = 100;
+        TTTYOBJ.kDataMaxLimit = 1000;
+        TTTYOBJ.tradeRate = 1; //杠杆率
+        TTTYOBJ.tradeBond = 10; //保证金率
+
+        TTTYOBJ.autoTradeFlag = false;
+        TTTYOBJ.autoTradeConfig = [];
+        TTTYOBJ.autoTradeTimer = null;
+        TTTYOBJ.autoTradeLastProfitArea = 0;
+        TTTYOBJ.autoTradeProfitHope = 0;
+
+        TTTYOBJ.myChart = echarts.init(document.getElementById('charts-wrap'));
+        TTTYOBJ.xAxisData = [];
+        TTTYOBJ.seriesAxisData = [];
+        TTTYOBJ.markLineData = 0;
+        TTTYOBJ.chartsOption = {
+            grid: {
+                top: 10,
+                bottom: 10,
+                left: '12%'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'
+                },
+                formatter: function (params) {
+                    // console.log('formatter', params);
+                    return `开盘：`+params[0].data[1]+`<br/>收盘：`+params[0].data[2]+`<br/>最低：`+params[0].data[3]+`<br/>最高：`+params[0].data[4]+``;
+                },
+            },
+            xAxis: {
+                show: false,
+                data: TTTYOBJ.xAxisData
+            },
+            yAxis: {
+                // type: 'category',
+                min: 'dataMin',
+                max: 'dataMax',
+            },
+            dataZoom: {
+                show: false,
+                startValue: 0,
+                endValue: 100,
+            },
+            series: [
+                {
+                    id: 'kline',
+                    type: 'candlestick',
+                    animation: false,
+                    data: TTTYOBJ.seriesAxisData,
+                    markLine: {
+                        symbol: ['circle', 'none'],
+                        label: {
+                            position: 'middle'
+                        },
+                        lineStyle: {
+                            type: 'dotted',
+                            color: '#0000ff'
+                        },
+                        data: [{
+                            yAxis: 0
+                        }]
+                    },
+                }
+            ]
+        };
+
+        TTTYOBJ.initSymbol = function() {
+            var symbolIndex = Math.floor(Math.random() * TTTYOBJ.symbolList.length);
+            // var symbolData  = TTTYOBJ.symbolList[symbolIndex];
+            // TTTYOBJ.symbol = symbolData[0] + '' + symbolData[1][Math.floor(Math.random() * symbolData[1].length)] + '' + symbolData[2][Math.floor(Math.random() * symbolData[2].length)];
+            TTTYOBJ.symbol = TTTYOBJ.symbolList[symbolIndex];
+        };
+
+        TTTYOBJ.initKdata = function() {
+            if (TTTYOBJ.symbol == '') {
+                TTTYOBJ.initSymbol();
+            }
+
+            TTTYOBJ.showToast('正在加载数据...', 1000*30);
+
+            $.ajax({
+                type: "post",
+                url: "https://testcefa.qimiaoxue.com/apis/index/testcurl",
+                data: {'url': TTTYOBJ.getKdataUrl + TTTYOBJ.symbol + '0'},
+                success: function (res) {
+                    // console.log('success', res);
+                    console.log('success');
+                    // $('.v-code span').text(TTTYOBJ.symbol);
+                    if (res && res != 'null') {
+                        TTTYOBJ.myKdata = JSON.parse(res);
+                        console.log('TTTYOBJ.myKdata.length', TTTYOBJ.myKdata.length);
+                        if (TTTYOBJ.myKdata.length > TTTYOBJ.kDataMaxLimit + TTTYOBJ.kDisplayLimit) {
+                            if (TTTYOBJ.kStartIndex < 0) {
+                                var startIndex = Math.floor(Math.random() * (TTTYOBJ.myKdata.length - TTTYOBJ.kDataMaxLimit + TTTYOBJ.kDisplayLimit));
+                                TTTYOBJ.kStartIndex = startIndex < 0 ? 0 : startIndex;
+                            } else {
+                                $('.btn-req-pk').html('正在<br/>PK');
+                            }
+                            $('.btn-req-pk').show();
+                            console.log('load-data', TTTYOBJ.myKdata.length, TTTYOBJ.kStartIndex, TTTYOBJ.kStartIndex + TTTYOBJ.kDataMaxLimit + TTTYOBJ.kDisplayLimit);
+                            TTTYOBJ.myKdata = TTTYOBJ.myKdata.slice(TTTYOBJ.kStartIndex, TTTYOBJ.kStartIndex + TTTYOBJ.kDataMaxLimit + TTTYOBJ.kDisplayLimit);
+                        }
+                        
+                        $('.v-code span').text('***(乘数:'+TTTYOBJ.symbolRateList[TTTYOBJ.symbol]+')');
+
+                        TTTYOBJ.initCharts();
+                        TTTYOBJ.showToast('数据下载成功，已提取' + TTTYOBJ.myKdata.length + '个数据');
+                    } else {
+                        TTTYOBJ.showToast('无数据');
+                    }
+                },
+                error: function (err) {
+                    console.log('err', err);
+                    TTTYOBJ.showToast('下载数据出错了~');
+                }
+            });
+        };
+
+        TTTYOBJ.initCharts = function() {
+            if (!TTTYOBJ.myKdata || TTTYOBJ.myKdata.length < TTTYOBJ.kDisplayLimit) {
+                return;
+            }
+            while(TTTYOBJ.kDataIndex < TTTYOBJ.kDisplayLimit) {
+                TTTYOBJ.nextKline();
+            }
+        };
+
+        TTTYOBJ.nextKline = function(autoTrade) {
+            if (TTTYOBJ.position.posGameOver == 1) {
+                TTTYOBJ.autoTradeFlag = false;
+                clearInterval(TTTYOBJ.autoTradeTimer);
+                TTTYOBJ.showToast('爆仓了，不要执着了', 1000*10);
+                return;
+            }
+
+            if (TTTYOBJ.autoTradeFlag && !autoTrade) {
+                TTTYOBJ.showToast('自动交易中，不能响应手动操作指令');
+                return;
+            }
+
+            var oldKdata = TTTYOBJ.currentKdata || [];
+            TTTYOBJ.currentKdata = TTTYOBJ.myKdata[TTTYOBJ.kDataIndex] || [];
+
+            if (oldKdata.length < 5 && TTTYOBJ.currentKdata.length < 5) {
+                TTTYOBJ.showToast('暂无交易数据');
+                return;
+            }
+
+            if (TTTYOBJ.currentKdata.length >= 5) {
+                if (TTTYOBJ.currentKdata[1] *1 <= 0 || TTTYOBJ.currentKdata[4] *1 <= 0 || TTTYOBJ.currentKdata[3] *1 <= 0 || TTTYOBJ.currentKdata[2] *1 <= 0) {
+                    if (TTTYOBJ.currentKdata[1] *1 <= 0) {
+                        TTTYOBJ.currentKdata[1] = TTTYOBJ.currentKdata[4] *1 > 0 ? TTTYOBJ.currentKdata[4] *1 : Math.max(TTTYOBJ.currentKdata[3] *1, TTTYOBJ.currentKdata[2] *1);
+                    }
+                    if (TTTYOBJ.currentKdata[4] *1 <= 0) {
+                        TTTYOBJ.currentKdata[4] = TTTYOBJ.currentKdata[1] *1 > 0 ? TTTYOBJ.currentKdata[1] *1 : Math.max(TTTYOBJ.currentKdata[3] *1, TTTYOBJ.currentKdata[2] *1);
+                    }
+                    if (TTTYOBJ.currentKdata[3] *1 <= 0) {
+                        TTTYOBJ.currentKdata[3] = Math.min(TTTYOBJ.currentKdata[1], TTTYOBJ.currentKdata[4]);
+                    }
+                    if (TTTYOBJ.currentKdata[2] *1 <= 0) {
+                        TTTYOBJ.currentKdata[2] = Math.max(TTTYOBJ.currentKdata[1], TTTYOBJ.currentKdata[4]);
+                    }
+                }
+                if (TTTYOBJ.currentKdata[1] *1 <= 0 || TTTYOBJ.currentKdata[4] *1 <= 0 || TTTYOBJ.currentKdata[3] *1 <= 0 || TTTYOBJ.currentKdata[2] *1 <= 0) {
+                    TTTYOBJ.showToast('当前数据有0值，已跳过');
+                    TTTYOBJ.kDataIndex++;
+                    return TTTYOBJ.nextKline();
+                }
+                // TTTYOBJ.xAxisData.push(TTTYOBJ.currentKdata[0]);
+                TTTYOBJ.xAxisData.push(TTTYOBJ.kDataIndex + 1);
+                //open,close,low,high
+                TTTYOBJ.seriesAxisData.push([TTTYOBJ.currentKdata[1] *1, TTTYOBJ.currentKdata[4] *1, TTTYOBJ.currentKdata[3] *1, TTTYOBJ.currentKdata[2] *1]);
+                TTTYOBJ.setChartOption();
+
+                if (TTTYOBJ.position.pos && TTTYOBJ.position.flag == '多') {
+                    TTTYOBJ.position.profitTemp = TTTYOBJ.currentKdata[4]*1 - TTTYOBJ.position.pos;
+                } else if (TTTYOBJ.position.pos && TTTYOBJ.position.flag == '空') {
+                    TTTYOBJ.position.profitTemp = TTTYOBJ.position.pos - TTTYOBJ.currentKdata[4]*1;
+                }
+
+                // $('.v-date span').text(TTTYOBJ.currentKdata[0]);
+                $('.v-open span').text(TTTYOBJ.currentKdata[1]*1);
+                $('.v-height span').text(TTTYOBJ.currentKdata[2]*1);
+                $('.v-low span').text(TTTYOBJ.currentKdata[3]*1);
+                $('.v-close span').text(TTTYOBJ.currentKdata[4]*1);
+
+                TTTYOBJ.kDataIndex++;
+            } else {
+                TTTYOBJ.currentKdata = oldKdata;
+
+                if (TTTYOBJ.myKdata.length <= TTTYOBJ.kDataIndex) {
+                    $('.v-code span').text(TTTYOBJ.symbol + '(' + TTTYOBJ.symbolNameList[TTTYOBJ.symbol] + ',乘数:'+TTTYOBJ.symbolRateList[TTTYOBJ.symbol]+')');
+                    $('.v-date span').text(TTTYOBJ.currentKdata[0]);
+
+                    //结束时自动平仓
+                    if (TTTYOBJ.position.pos && TTTYOBJ.position.flag == '多') {
+                        TTTYOBJ.position.profit += TTTYOBJ.currentKdata[4]*1 - TTTYOBJ.position.pos;
+                        TTTYOBJ.showToast('已结束，当前的多单已自动卖平');
+                    } else if (TTTYOBJ.position.pos && TTTYOBJ.position.flag == '空') {
+                        TTTYOBJ.position.profit += TTTYOBJ.position.pos - TTTYOBJ.currentKdata[4]*1;
+                        TTTYOBJ.showToast('已结束，当前的空单已自动买平');
+                    } else {
+                        TTTYOBJ.showToast('已结束');
+                    }
+                    TTTYOBJ.position.profitTemp = 0;
+                    TTTYOBJ.position.pos = 0;
+                    TTTYOBJ.position.flag = '';
+
+                    TTTYOBJ.autoTradeFlag = false;
+                    clearInterval(TTTYOBJ.autoTradeTimer);
+                } else {
+                    TTTYOBJ.showToast('提取数据错误，请重试');
+                }
+            }
+
+            if (oldKdata.length >= 5 && TTTYOBJ.currentKdata.length >= 5 && TTTYOBJ.autoTradeFlag && TTTYOBJ.markLineData) {
+                var _oldClose = oldKdata[4]*1;
+                var _currClose = TTTYOBJ.currentKdata[4]*1;
+                if (TTTYOBJ.position.pos == 0) {
+                    if (_currClose >= TTTYOBJ.markLineData) {
+                        TTTYOBJ.actionTradeBuy();
+                    } else if (_currClose <= TTTYOBJ.markLineData) {
+                        TTTYOBJ.actionTradeSell();
+                    }
+                } else if (TTTYOBJ.position.pos > 0 && TTTYOBJ.position.flag == '多') {
+                    if (_currClose <= TTTYOBJ.markLineData) {
+                        TTTYOBJ.actionTradeBack();
+                    }
+                } else if (TTTYOBJ.position.pos > 0 && TTTYOBJ.position.flag == '空') {
+                    if (_currClose >= TTTYOBJ.markLineData) {
+                        TTTYOBJ.actionTradeBack();
+                    }
+                }
+            }
+
+            $('.v-kdata-len span').text((TTTYOBJ.myKdata.length - TTTYOBJ.kDataIndex) + '/' + TTTYOBJ.myKdata.length);
+            TTTYOBJ.showPositionData();
+            TTTYOBJ.checkMarkLine();
+        };
+
+        TTTYOBJ.showPositionData = function() {
+            $('.v-pos-pos span').text(TTTYOBJ.position.pos);
+            $('.v-pos-flag span').text(TTTYOBJ.position.flag);
+            
+            var _rate = TTTYOBJ.symbolRateList[TTTYOBJ.symbol];
+            if (TTTYOBJ.position.pos > 0 && TTTYOBJ.position.initAmount <= 0) {
+                TTTYOBJ.position.initAmount = TTTYOBJ.position.pos * _rate / TTTYOBJ.tradeRate;
+                $('.v-init-amount span').text(TTTYOBJ.tradeRate + 'X,￥' + TTTYOBJ.position.initAmount.toFixed(2)*1);
+                if (!TTTYOBJ.getQueryString('pk') && $('.pk-url-value').val() == '') {
+                    $('.btn-req-pk').hide();
+                }
+            }
+
+            if (TTTYOBJ.position.initAmount > 0) {
+                var _profit = (TTTYOBJ.position.profit * _rate).toFixed(2)*1;
+                var _profitRate = (_profit / TTTYOBJ.position.initAmount * 100).toFixed(2)*1;
+                $('.v-pos-profit span').text(_profitRate + '%,￥' + _profit);
+
+                var _profitTemp = (TTTYOBJ.position.profitTemp * _rate).toFixed(2)*1;
+                var _profitTempRate = (_profitTemp / TTTYOBJ.position.initAmount * 100).toFixed(2)*1;
+                $('.v-pos-profit-temp span').text(_profitTempRate + '%,￥' + _profitTemp);
+
+                var _profitTotal = ((TTTYOBJ.position.profit + TTTYOBJ.position.profitTemp) * _rate).toFixed(2)*1;
+                var _profitTotalRate = (_profitTotal / TTTYOBJ.position.initAmount * 100).toFixed(2)*1;
+                $('.v-pos-profit-total span').text(_profitTotalRate + '%,￥' + _profitTotal);
+
+                var _bondAmount = (TTTYOBJ.currentKdata[4]*1 * _rate * TTTYOBJ.tradeBond / 100).toFixed(2)*1;
+                $('.v-curr-amount span').text('￥' + (TTTYOBJ.position.initAmount + _profitTotal).toFixed(2)*1);
+                $('.v-free-amount span').text('￥' + (TTTYOBJ.position.initAmount + _profitTotal - _bondAmount).toFixed(2)*1);
+                $('.v-bond-amount span').text(TTTYOBJ.tradeBond + '%,￥' + _bondAmount);
+                $('.v-trade-clicks span').text('买:'+TTTYOBJ.btnClicks.buy+',卖:'+TTTYOBJ.btnClicks.sell+',反手:'+TTTYOBJ.btnClicks.back+'');
+
+                if (_bondAmount >= TTTYOBJ.position.initAmount + _profitTotal) {
+                    TTTYOBJ.position.posGameOver = 1;
+                    TTTYOBJ.showToast('完蛋了。。。爆仓了~', 1000*10);
+                }
+            }
+
+            if (TTTYOBJ.position.profit > 0) {
+                $('.v-pos-profit span').css({'color': '#ff0000'});
+            } else if (TTTYOBJ.position.profit < 0) {
+                $('.v-pos-profit span').css({'color': '#00ff00'});
+            }
+
+            if (TTTYOBJ.position.profitTemp > 0) {
+                $('.v-pos-profit-temp span').css({'color': '#ff0000'});
+            } else if (TTTYOBJ.position.profitTemp < 0) {
+                $('.v-pos-profit-temp span').css({'color': '#00ff00'});
+            }
+
+            if (TTTYOBJ.position.profit + TTTYOBJ.position.profitTemp > 0) {
+                $('.v-pos-profit-total span').css({'color': '#ff0000'});
+            } else if (TTTYOBJ.position.profit + TTTYOBJ.position.profitTemp < 0) {
+                $('.v-pos-profit-total span').css({'color': '#00ff00'});
+            }
+
+            if (TTTYOBJ.position.flag == '多') {
+                $('.v-pos-flag span').css({'color': '#ffffff', 'background': '#ff0000'});
+            } else if (TTTYOBJ.position.flag == '空') {
+                $('.v-pos-flag span').css({'color': '#ffffff', 'background': '#00ff00'});
+            }
+        };
+
+        TTTYOBJ.checkMarkLine = function() {
+            if (!TTTYOBJ.autoTradeFlag && TTTYOBJ.position.initAmount > 0) {
+                return;
+            }
+            var _rate = TTTYOBJ.symbolRateList[TTTYOBJ.symbol];
+            var _profitTotal = ((TTTYOBJ.position.profit + TTTYOBJ.position.profitTemp) * _rate).toFixed(2)*1;
+            var _profitTotalRate = (_profitTotal / TTTYOBJ.position.initAmount * 100).toFixed(2)*1;
+            var _profitTemp = (TTTYOBJ.position.profitTemp * _rate).toFixed(2)*1;
+            var _profitTempRate = (_profitTemp / TTTYOBJ.position.initAmount * 100).toFixed(2)*1;
+            var _currClose = TTTYOBJ.currentKdata[4]*1;
+
+            if (TTTYOBJ.autoTradeProfitHope > 0 && _profitTotalRate * 1 >= TTTYOBJ.autoTradeProfitHope) {
+                TTTYOBJ.autoTradeFlag = false;
+                clearInterval(TTTYOBJ.autoTradeTimer);
+                TTTYOBJ.showToast('已达成目标:' + TTTYOBJ.autoTradeProfitHope + '，已停止自动交易');
+                return;
+            }
+
+            if (_profitTempRate * 1 > 0) {
+                for(var i = 0; i < TTTYOBJ.autoTradeConfig.length; i++) {
+                    if (_profitTempRate >= TTTYOBJ.autoTradeConfig[i].profit && _profitTempRate > TTTYOBJ.autoTradeLastProfitArea) {
+                        var _diff = TTTYOBJ.position.profitTemp * TTTYOBJ.autoTradeConfig[i].callback / 100;
+                        var _oldMarkLineData = TTTYOBJ.markLineData;
+                        if (TTTYOBJ.position.pos > 0 && TTTYOBJ.position.flag == '多') {
+                            _diff = _diff * -1;
+                        } else if (TTTYOBJ.position.pos > 0 && TTTYOBJ.position.flag == '空') {
+                            
+                        }
+                        TTTYOBJ.autoTradeLastProfitArea = _profitTempRate;
+                        TTTYOBJ.markLineData = (_currClose + _diff).toFixed(2)*1;
+                        TTTYOBJ.setChartOption();
+                        console.log('树枝变更', _profitTempRate, TTTYOBJ.autoTradeConfig[i], TTTYOBJ.position, _currClose, _oldMarkLineData, TTTYOBJ.markLineData);
+                        TTTYOBJ.showToast('树枝变更:' + _oldMarkLineData + '==>>' + TTTYOBJ.markLineData);
+                        // break;
+                        return;
+                    }
+                }
+            }
+            
+        };
+
+        TTTYOBJ.setChartOption = function(){
+            // console.log('TTTYOBJ.chartsOption', TTTYOBJ.chartsOption);
+            TTTYOBJ.chartsOption.dataZoom = {
+                show: false,
+                startValue: TTTYOBJ.kDataIndex - TTTYOBJ.kDisplayLimit,
+                endValue: TTTYOBJ.kDataIndex + 1,
+            };
+            TTTYOBJ.chartsOption.series[0].markLine.data = [{
+                yAxis: TTTYOBJ.markLineData
+            }];
+            TTTYOBJ.myChart.setOption(TTTYOBJ.chartsOption);
+        };
+
+        TTTYOBJ.showToast = function(msg, times) {
+            times = times || 5000;
+            clearTimeout(TTTYOBJ.toastTimer);
+            $('#toast-wrap').html(msg);
+            $('#toast-wrap').css({display: 'block'});
+            TTTYOBJ.toastTimer = setTimeout(function(){
+                $('#toast-wrap').css({display: 'none'});
+            }, times);
+        };
+
+        TTTYOBJ.getQueryString = function(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        };
+
+        TTTYOBJ.checkPkParam = function() {
+            var pkParam = TTTYOBJ.getQueryString('pk');
+            console.log('PK', pkParam);
+            if (pkParam) {
+                TTTYOBJ.showToast('正在获取PK数据', 1000*30);
+                $('#option-window-wrap').hide();
+
+                $.ajax({
+                    type: "post",
+                    url: "https://testcefa.qimiaoxue.com/apis/index/testcurl/getparams",
+                    data: {'pk': pkParam},
+                    success: function (res) {
+                        console.log('checkPkParam', res);
+                        if (res && res != 'null') {
+                            var _pkRet = JSON.parse(res);
+                            console.log('TTTYOBJ.myKdata.length', TTTYOBJ.myKdata.length);
+
+                            TTTYOBJ.symbol = _pkRet.symbol;
+                            TTTYOBJ.kDataMaxLimit = _pkRet.kDataMaxLimit * 1;
+                            TTTYOBJ.kStartIndex = _pkRet.kStartIndex * 1;
+                            TTTYOBJ.tradeRate = _pkRet.tradeRate * 1;
+                            TTTYOBJ.tradeBond = _pkRet.tradeBond * 1;
+                            TTTYOBJ.initKdata();
+                        } else {
+                            $('.btn-req-pk').hide();
+                            TTTYOBJ.showToast('PK参数已过期失效');
+                        }
+                    },
+                    error: function (err) {
+                        console.log('err', err);
+                        TTTYOBJ.showToast('获取PK参数失败，请重试~');
+                    }
+                });
+
+            }
+        };
+
+        TTTYOBJ.actionTradeBuy = function() {
+            if (TTTYOBJ.position.pos && TTTYOBJ.position.flag == '多') {
+                TTTYOBJ.showToast('已持有多仓');
+                return;
+            }
+
+            if (TTTYOBJ.position.pos) {
+                TTTYOBJ.position.profit += TTTYOBJ.position.pos - TTTYOBJ.currentKdata[4]*1;
+                TTTYOBJ.position.pos = 0;
+                TTTYOBJ.position.flag = '';
+            } else {
+                TTTYOBJ.position.pos = TTTYOBJ.currentKdata[4]*1;
+                TTTYOBJ.position.flag = '多';
+            }
+            TTTYOBJ.position.profitTemp = 0;
+            TTTYOBJ.btnClicks.buy++;
+            TTTYOBJ.showPositionData();
+            if (TTTYOBJ.autoTradeFlag) {
+                // TTTYOBJ.checkMarkLine();
+                TTTYOBJ.autoTradeLastProfitArea = 0;
+            } else {
+                TTTYOBJ.nextKline();
+            }
+        };
+
+        TTTYOBJ.actionTradeSell = function() {
+            if (TTTYOBJ.position.pos && TTTYOBJ.position.flag == '空') {
+                TTTYOBJ.showToast('已持有空仓');
+                return;
+            }
+            
+            if (TTTYOBJ.position.pos) {
+                TTTYOBJ.position.profit += TTTYOBJ.currentKdata[4]*1 - TTTYOBJ.position.pos;
+                TTTYOBJ.position.pos = 0;
+                TTTYOBJ.position.flag = '';
+            } else {
+                TTTYOBJ.position.pos = TTTYOBJ.currentKdata[4]*1;
+                TTTYOBJ.position.flag = '空';
+            }
+            TTTYOBJ.position.profitTemp = 0;
+            TTTYOBJ.btnClicks.sell++;
+            TTTYOBJ.showPositionData();
+            if (TTTYOBJ.autoTradeFlag) {
+                // TTTYOBJ.checkMarkLine();
+                TTTYOBJ.autoTradeLastProfitArea = 0;
+            } else {
+                TTTYOBJ.nextKline();
+            }
+
+        };
+
+        TTTYOBJ.actionTradeBack = function() {
+            if (!TTTYOBJ.position.pos || TTTYOBJ.position.flag == '') {
+                TTTYOBJ.showToast('没有持仓不能反手');
+                return;
+            }
+
+            if (TTTYOBJ.position.pos && TTTYOBJ.position.flag == '多') {
+                TTTYOBJ.position.profit += TTTYOBJ.currentKdata[4]*1 - TTTYOBJ.position.pos;
+                TTTYOBJ.position.pos = TTTYOBJ.currentKdata[4]*1;
+                TTTYOBJ.position.flag = '空';
+            } else if (TTTYOBJ.position.pos && TTTYOBJ.position.flag == '空') {
+                TTTYOBJ.position.profit += TTTYOBJ.position.pos - TTTYOBJ.currentKdata[4]*1;
+                TTTYOBJ.position.pos = TTTYOBJ.currentKdata[4]*1;
+                TTTYOBJ.position.flag = '多';
+            }
+            TTTYOBJ.position.profitTemp = 0;
+            TTTYOBJ.btnClicks.back++;
+            TTTYOBJ.showPositionData();
+            if (TTTYOBJ.autoTradeFlag) {
+                // TTTYOBJ.checkMarkLine();
+                TTTYOBJ.autoTradeLastProfitArea = 0;
+            } else {
+                TTTYOBJ.nextKline();
+            }
+        };
+
+        TTTYOBJ.kLimitRangeTimer = null;
+        TTTYOBJ.markLineRangeTimer = null;
+        var _localStoreKey = 'last-config';
+        var _autoTradeStoreKey = 'auto-trade-config';
+        TTTYOBJ.initEvent = function() {
+            var _symbolList = TTTYOBJ.symbolList.sort();
+            for (var i = 0; i < _symbolList.length; i++) {
+                var _symbol = _symbolList[i];
+                $('#obj-symbol').append('<option value ="'+_symbol+'">'+_symbol+'</option>');
+            }
+
+            var _lastConfig = localStorage.getItem(_localStoreKey);
+            console.log('_lastConfig', _lastConfig);
+            if (_lastConfig && _lastConfig.indexOf('}') > 0) {
+                _lastConfig = JSON.parse(_lastConfig);
+                $('#obj-symbol').val(_lastConfig.symbol);
+                $('#obj-max-kdata-limit').val(_lastConfig.kMaxLimit);
+                $('#obj-trade-bond').val(_lastConfig.tradeBond);
+                $('#obj-trade-rate').val(_lastConfig.tradeRate);
+            }
+
+            $('#slider-range-klimit').bind('input propertychange', function(){
+                // console.log('slider-range-klimit',$('#slider-range-klimit').val());
+                TTTYOBJ.kDisplayLimit = $('#slider-range-klimit').val() * 1;
+                $('#slider-range-klimit-label span').text(TTTYOBJ.kDisplayLimit);
+                clearTimeout(TTTYOBJ.kLimitRangeTimer);
+                TTTYOBJ.kLimitRangeTimer = setTimeout(function(){
+                    TTTYOBJ.setChartOption();
+                }, 100);
+            });
+
+            $('#mark-line-value').bind('change', function(){
+                console.log('mark-line-value-change', $('#mark-line-value').val())
+                TTTYOBJ.markLineData = $('#mark-line-value').val() * 1 || 0;
+                $('#mark-line-value').val(TTTYOBJ.markLineData);
+                TTTYOBJ.setChartOption();
+            });
+
+            $('.btn-mark-line-sub').bind('click', function(){
+                TTTYOBJ.markLineData--;
+                if (TTTYOBJ.markLineData < 0) {
+                    TTTYOBJ.markLineData = 0;
+                }
+                $('#mark-line-value').val(TTTYOBJ.markLineData);
+                TTTYOBJ.setChartOption();
+            });
+
+            $('.btn-mark-line-add').bind('click', function(){
+                TTTYOBJ.markLineData++;
+                $('#mark-line-value').val(TTTYOBJ.markLineData);
+                TTTYOBJ.setChartOption();
+            });
+
+            $('.btn-start').bind('click', function(){
+                TTTYOBJ.symbol = $('#obj-symbol').val();
+                TTTYOBJ.kDataMaxLimit = $('#obj-max-kdata-limit').val() * 1;
+                TTTYOBJ.tradeRate = $('#obj-trade-rate').val() * 1; //杠杆率
+                TTTYOBJ.tradeBond = $('#obj-trade-bond').val() * 1; //保证金率
+                if (10000 * TTTYOBJ.tradeBond / 100 >= 10000 / TTTYOBJ.tradeRate) {
+                    TTTYOBJ.showToast('杠杆率+保证金率的组合过高');
+                    return;
+                }
+
+                var _currConfig = {
+                    symbol: TTTYOBJ.symbol,
+                    kMaxLimit: TTTYOBJ.kDataMaxLimit,
+                    tradeBond: TTTYOBJ.tradeBond,
+                    tradeRate: TTTYOBJ.tradeRate
+                }
+                localStorage.setItem(_localStoreKey, JSON.stringify(_currConfig));
+
+                $('#option-window-wrap').hide();
+                TTTYOBJ.initKdata();
+            });
+            
+            $('.btn-next').bind('click', function(){
+                console.log('btn-next--click');
+                // debugger;
+                TTTYOBJ.nextKline();
+            });
+
+            $(document).keypress(function (e) {
+                console.log('keypress', e.keyCode);
+                
+                if (e.keyCode == 27 || e.keyCode == 32 || e.keyCode == 68 || e.keyCode == 100) {
+                    $('.btn-next').click(); //D,d,空格
+                } else if (e.keyCode == 67 || e.keyCode == 99) {
+                    $('.btn-back').click(); //C,c
+                } else if (e.keyCode == 65 || e.keyCode == 97) {
+                    $('.btn-buy').click(); //A,a
+                } else if (e.keyCode == 66 || e.keyCode == 98) {
+                    $('.btn-sell').click(); //B,b
+                }
+            });
+
+            $('.btn-buy').bind('click', function(){
+                if (TTTYOBJ.autoTradeFlag) {
+                    TTTYOBJ.showToast('自动交易中，不能响应手动操作指令');
+                    return;
+                }
+
+                TTTYOBJ.actionTradeBuy();
+            });
+
+            $('.btn-sell').bind('click', function(){
+                if (TTTYOBJ.autoTradeFlag) {
+                    TTTYOBJ.showToast('自动交易中，不能响应手动操作指令');
+                    return;
+                }
+
+                TTTYOBJ.actionTradeSell();
+            });
+
+            $('.btn-back').bind('click', function(){
+                if (TTTYOBJ.autoTradeFlag) {
+                    TTTYOBJ.showToast('自动交易中，不能响应手动操作指令');
+                    return;
+                }
+
+                TTTYOBJ.actionTradeBack();
+            });
+
+            $('.btn-reset').bind('click', function(){
+                window.location.href = 'wind.html';
+            });
+
+            $('.btn-draw-line').bind('click', function(){
+                if (TTTYOBJ.autoTradeFlag) {
+                    TTTYOBJ.showToast('自动交易中，不能响应手动操作指令');
+                    return;
+                }
+
+                if ($('.mark-line-wrap').css('display') == 'none') {
+                    $('.mark-line-wrap').css({'display': 'block'});
+                    // $('#slider-range-mark-line').attr('min', TTTYOBJ.currentKdata[3]*0.95);
+                    // $('#slider-range-mark-line').attr('max', TTTYOBJ.currentKdata[2]*1.05);
+                    TTTYOBJ.markLineData = TTTYOBJ.currentKdata[4]*1 || 100;
+                    $('#mark-line-value').val(TTTYOBJ.markLineData);
+                } else {
+                    $('.mark-line-wrap').css({'display': 'none'});
+                }
+            });
+
+            $('.btn-req-pk').bind('click', function(){
+                if ($('.pk-url-value').val() != '') {
+                    $('.pk-wrap').show();
+                    $('.pk-url-value').select();
+                    var _copyRet = document.execCommand('copy');
+                    if (_copyRet) {
+                        TTTYOBJ.showToast('已复制PK链接');
+                    }
+                    return;
+                } else if (TTTYOBJ.getQueryString('pk')) {
+                    $('.pk-wrap').show();
+                    $('.pk-url-value').val('速来PK: ' + window.location.href);
+                    $('.pk-url-value').select();
+                    var _copyRet = document.execCommand('copy');
+                    if (_copyRet) {
+                        TTTYOBJ.showToast('已复制PK链接');
+                    }
+                    return;
+                }
+                var _postParam = {
+                    symbol: TTTYOBJ.symbol,
+                    kDataMaxLimit: TTTYOBJ.kDataMaxLimit,
+                    tradeRate: TTTYOBJ.tradeRate,
+                    tradeBond: TTTYOBJ.tradeBond,
+                    kStartIndex: TTTYOBJ.kStartIndex
+                }
+                $.ajax({
+                    type: "post",
+                    url: "https://testcefa.qimiaoxue.com/apis/index/testcurl/setparams",
+                    data: _postParam,
+                    success: function (res) {
+                        console.log('btn-req-p', res);
+                        if (res && res != 'null') {
+                            $('.pk-wrap').show();
+                            $('.pk-url-value').val('速来PK: https://hello-rong.gitee.io/web/wind.html?pk=' + res);
+                            $('.pk-url-value').select();
+                            var _copyRet = document.execCommand('copy');
+                            if (_copyRet) {
+                                TTTYOBJ.showToast('已复制PK链接');
+                            }
+                        } else {
+                            TTTYOBJ.showToast('生成参数失败，请重试');
+                        }
+                    },
+                    error: function (err) {
+                        console.log('err', err);
+                        TTTYOBJ.showToast('程序操作失败了，请重试~');
+                    }
+                });
+            });
+            
+            $('.btn-start-pk').bind('click', function(){
+                $('.pk-wrap').hide();
+                // $('.btn-req-pk').hide();
+                $('.btn-req-pk').html('正在<br/>PK');
+            });
+
+            $('.btn-auto-trade').bind('click', function(){
+                if (TTTYOBJ.markLineData <= 0) {
+                    // TTTYOBJ.showToast('请先设置交易树枝');
+                    // return;
+                    TTTYOBJ.markLineData = TTTYOBJ.currentKdata[4]*1;
+                    TTTYOBJ.setChartOption();
+                }
+
+                if (TTTYOBJ.autoTradeFlag) {
+                    TTTYOBJ.showToast('已暂停自动交易');
+                }
+                
+                TTTYOBJ.autoTradeFlag = false;
+                clearInterval(TTTYOBJ.autoTradeTimer);
+
+                var _klinePlaySpeed = localStorage.getItem(_autoTradeStoreKey + '-play-speed');
+                if (_klinePlaySpeed) {
+                    $('#obj-kline-play-speed').val(_klinePlaySpeed);
+                }
+
+                var _tradeProfitHope = localStorage.getItem(_autoTradeStoreKey + '-profit-hope');
+                if (_tradeProfitHope) {
+                    $('#obj-trade-profit-hope').val(_tradeProfitHope);
+                }
+
+                if ($('.auto-trade-wrap .form-row').length <= 0) {
+                    var _autoTradeConfig = localStorage.getItem(_autoTradeStoreKey);
+                    if (!_autoTradeConfig) {
+                        _autoTradeConfig = '[{"profit":10,"callback":50}]';
+                    }
+                    if (_autoTradeConfig) {
+                        _autoTradeConfig = JSON.parse(_autoTradeConfig);
+                        for(var i = 0; i < _autoTradeConfig.length; i++) {
+                            var _html = `
+                                <div class="row form-row clear-fix">
+                                    <div class="col"><input type="number" class="tb-auto-trade-profit" value="`+_autoTradeConfig[i].profit+`" /></div>
+                                    <div class="col"><input type="number" class="tb-auto-trade-callback" value="`+_autoTradeConfig[i].callback+`" /></div>
+                                    <div class="col btn-row btn-del-row">-</div>
+                                </div>
+                            `;
+                            $('.auto-trade-wrap .table-wrap').append(_html);
+
+                            $('.auto-trade-wrap .btn-del-row').unbind('click');
+                            $('.auto-trade-wrap .btn-del-row').bind('click', function(){
+                                $(this).parent('.form-row').remove();
+                            });
+                        }
+                    }
+                }
+
+                $('.auto-trade-wrap').show();
+                if ($('.auto-trade-wrap .form-row').length <= 0) {
+                    $('.auto-trade-wrap .btn-add-row').click();
+                }
+            });
+            
+            $('.btn-start-auto-trade').bind('click', function(){
+                var _rows = [];
+                var _error = false;
+                $('.auto-trade-wrap .form-row').each(function(i, obj){
+                    // console.log(i, obj);
+                    var _row = {
+                        profit: $(obj).find('.tb-auto-trade-profit').val() * 1,
+                        callback: $(obj).find('.tb-auto-trade-callback').val() * 1
+                    };
+                    if (_row.profit > 0 && _row.callback >= 0) {
+                        _rows.push(_row);
+                    } else {
+                        _error = true;
+                        TTTYOBJ.showToast('第' + (i+1) + '行设置错误');
+                        return false; //break;
+                    }
+                });
+
+                if (_error) {
+                    return;
+                }
+
+                if (_rows.length <= 0) {
+                    TTTYOBJ.showToast('请先设置自动化条件');
+                    return;
+                }
+
+                if (!_error) {
+                    //按照profit排序
+                    var _rowsOrder = _rows.sort(
+                        function(a, b)
+                        {
+                            if(a.profit < b.profit) return 1;
+                            if(a.profit > b.profit) return -1;
+                            return 0;
+                        }
+                    );
+                    console.log('_rowsOrder', _rowsOrder);
+                    localStorage.setItem(_autoTradeStoreKey, JSON.stringify(_rowsOrder));
+
+                    var _klinePlaySpeed = $('#obj-kline-play-speed').val();
+                    localStorage.setItem(_autoTradeStoreKey + '-play-speed', _klinePlaySpeed);
+
+                    var _tradeProfitHope = $('#obj-trade-profit-hope').val();
+                    localStorage.setItem(_autoTradeStoreKey + '-profit-hope', _tradeProfitHope);
+                    TTTYOBJ.autoTradeProfitHope = _tradeProfitHope * 1;
+
+                    TTTYOBJ.autoTradeFlag = true;
+                    TTTYOBJ.autoTradeConfig = _rowsOrder;
+                    clearInterval(TTTYOBJ.autoTradeTimer);
+                    TTTYOBJ.autoTradeTimer = setInterval(function(){
+                        TTTYOBJ.nextKline(true);
+                    }, _klinePlaySpeed * 1);
+                    $('.auto-trade-wrap').hide();
+                }
+            });
+            
+            $('.btn-cancel-auto-trade').bind('click', function(){
+                TTTYOBJ.autoTradeFlag = false;
+                clearInterval(TTTYOBJ.autoTradeTimer);
+                $('.auto-trade-wrap').hide();
+            });
+            
+            $('.auto-trade-wrap .btn-add-row').bind('click', function(){
+                var _html = `
+                    <div class="row form-row clear-fix">
+                        <div class="col"><input type="number" class="tb-auto-trade-profit" value="" /></div>
+                        <div class="col"><input type="number" class="tb-auto-trade-callback" value="" /></div>
+                        <div class="col btn-row btn-del-row">-</div>
+                    </div>
+                `;
+                $('.auto-trade-wrap .table-wrap').append(_html);
+
+                $('.auto-trade-wrap .btn-del-row').unbind('click');
+                $('.auto-trade-wrap .btn-del-row').bind('click', function(){
+                    $(this).parent('.form-row').remove();
+                });
+            });
+            
+            $('.btn-start-auto-play-kline').bind('click', function(){
+                var _klinePlaySpeed = $('#obj-kline-play-speed').val();
+                localStorage.setItem(_autoTradeStoreKey + '-play-speed', _klinePlaySpeed);
+
+                TTTYOBJ.autoTradeFlag = false;
+                clearInterval(TTTYOBJ.autoTradeTimer);
+                TTTYOBJ.autoTradeTimer = setInterval(function(){
+                    TTTYOBJ.nextKline();
+                }, _klinePlaySpeed * 1);
+                $('.auto-trade-wrap').hide();
+            });
+        };
+
+        TTTYOBJ.init = function() {
+            TTTYOBJ.initEvent();
+            TTTYOBJ.checkPkParam();
+        };
+
+        TTTYOBJ.init();
+    </script>
+</body>
+
+</html>
