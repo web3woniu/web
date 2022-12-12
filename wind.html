@@ -1145,10 +1145,10 @@
                 TTTYOBJ.kDataMaxLimit = $('#obj-max-kdata-limit').val() * 1;
                 TTTYOBJ.tradeRate = $('#obj-trade-rate').val() * 1; //杠杆率
                 TTTYOBJ.tradeBond = $('#obj-trade-bond').val() * 1; //保证金率
-                if (10000 * TTTYOBJ.tradeBond / 100 >= 10000 / TTTYOBJ.tradeRate) {
-                    TTTYOBJ.showToast('杠杆率+保证金率的组合过高');
-                    return;
-                }
+                // if (10000 * TTTYOBJ.tradeBond / 100 >= 10000 / TTTYOBJ.tradeRate) {
+                //     TTTYOBJ.showToast('杠杆率+保证金率的组合过高');
+                //     return;
+                // }
 
                 var _currConfig = {
                     symbol: TTTYOBJ.symbol,
